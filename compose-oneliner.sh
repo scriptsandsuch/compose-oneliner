@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 
+   exit 1
+fi
+
 # Absolute path to this script
 SCRIPT=$(readlink -f "$0")
 # Absolute path to the script directory
