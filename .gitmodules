@@ -1,9 +1,0 @@
-[submodule "ansible/roles/nvidia-driver"]
-	path = ansible/roles/nvidia-driver
-	url = https://github.com/NVIDIA/ansible-role-nvidia-driver.git
-[submodule "ansible/roles/docker"]
-	path = ansible/roles/docker
-	url = https://github.com/geerlingguy/ansible-role-docker.git
-[submodule "ansible/roles/nvidia-docker"]
-	path = ansible/roles/nvidia-docker
-	url = https://github.com/NVIDIA/ansible-role-nvidia-docker.git
