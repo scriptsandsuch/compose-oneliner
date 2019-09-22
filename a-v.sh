@@ -44,13 +44,13 @@ elif [ -x "$(command -v yum)" ]; then
      yum install -y git
 fi
 
-[ -d /opt/Post-Install ] && rm -rf /opt/Post-Install
+[ -d /opt/compose-oneliner ] && rm -rf /opt/compose-oneliner
 
-git clone --recurse-submodules  https://github.com/OriBenHur-Any/Post-Install.git -b On_linener  /opt/Post-Install
+git clone --recurse-submodules  https://github.com/AnyVisionltd/compose-oneliner.git /opt/compose-oneliner
 
-pushd /opt/Post-Install && chmod u+x /opt/Post-Install/Post-Install.sh
+pushd /opt/compose-oneliner && chmod u+x /opt/compose-oneliner/compose-oneliner.sh
 
-exec ./Post-Install.sh ${BRANCH} ${PRODUCT}
+exec ./compose-oneliner.sh ${BRANCH} ${PRODUCT}
 if [ $? -ne 0 ] ; then 
 	echo "Something went wrong contact support"
 	exit 99
