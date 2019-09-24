@@ -13,6 +13,7 @@ do
         ;;
         "-g"|"--git")
             GIT="${args[((i+1))]}"
+        ;;
         "-p"|"--product")
             PRODUCT="${args[((i+1))]}"
         ;;
