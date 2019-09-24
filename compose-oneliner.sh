@@ -43,6 +43,9 @@ ansible-playbook --become --become-user=root ansible/main.yml -vvv
 sed -i -r -e 's/^GRUB_CMDLINE_LINUX_DEFAULT="(.*)?quiet ?(.*)?"/GRUB_CMDLINE_LINUX_DEFAULT="\1\2"/' -e 's/^GRUB_CMDLINE_LINUX_DEFAULT="(.*)?splash ?(.*)?"/GRUB_CMDLINE_LINUX_DEFAULT="\1\2"/' /etc/default/grub
 update-grub
 
+echo 'xhost +SI:localuser:root' | tee /etc/profile.d/xhost.sh
+usermod -aG docker $(logname)
+chown -R $(logname):$(logname) ${DOCKER_COMPOSE_DIR}
 pushd ${DOCKER_COMPOSE_DIR}/${BRANCH}
 docker-compose up -d 
 
