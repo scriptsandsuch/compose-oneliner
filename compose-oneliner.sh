@@ -60,6 +60,6 @@ usermod -aG docker $(logname)
 chown -R $(logname):$(logname) ${DOCKER_COMPOSE_DIR}
 pushd ${DOCKER_COMPOSE_DIR}/${BRANCH}
 docker login -u "${gcr_user}" -p "${gcr_key}" "https://gcr.io"
-docker-compose pull
+docker-compose up -d
 
 echo "Done"
