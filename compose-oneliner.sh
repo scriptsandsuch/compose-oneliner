@@ -14,7 +14,16 @@ COMPOSE_BASH_URL="https://github.com/AnyVisionltd"
 BRANCH=$1
 PRODUCT=$2
 COMPOSE_REPO_GIT="${3:-docker-compose}.git"
-COMPOSSE_REPO="${COMPOSE_BASH_URL}/${COMPOSE_REPO_GIT}"
+TOKEN=$4
+if [[ $TOKEN != "" ]] && [[ $TOKEN == *".json" ]] && [[ -f $TOKEN ]] ;then
+    gcr_user="_json_key" 
+    gcr_key="$(cat ${TOKEN} | tr '\n' ' ')"
+elif  [[ $TOKEN != "" ]] && [[ ! -f $TOKEN ]] && [[ $TOKEN != *".json" ]]; then
+    gcr_user="oauth2accesstoken"
+    gcr_key=$TOKEN
+fi
+
+COMPOSE_REPO="${COMPOSE_BASH_URL}/${COMPOSE_REPO_GIT}"
 [ -d $DOCKER_COMPOSE_DIR ] || mkdir $DOCKER_COMPOSE_DIR
 [ -d ${DOCKER_COMPOSE_DIR}/${BRANCH} ] && rm -rf ${DOCKER_COMPOSE_DIR}/${BRANCH}
 git clone ${COMPOSE_REPO} -b ${BRANCH} ${DOCKER_COMPOSE_DIR}/${BRANCH}
@@ -50,6 +59,7 @@ echo 'xhost +SI:localuser:root' | tee /etc/profile.d/xhost.sh
 usermod -aG docker $(logname)
 chown -R $(logname):$(logname) ${DOCKER_COMPOSE_DIR}
 pushd ${DOCKER_COMPOSE_DIR}/${BRANCH}
-docker-compose up -d 
+docker login -u "${gcr_user}" -p "${gcr_key}" "https://gcr.io"
+docker-compose pull
 
 echo "Done"

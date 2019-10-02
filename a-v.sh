@@ -11,6 +11,9 @@ do
         "-b"|"--branch")
             BRANCH="${args[((i+1))]}"
         ;;
+        "-k"|"--token")
+            TOKEN="${args[((i+1))]}"
+        ;;
         "-g"|"--git")
             GIT="${args[((i+1))]}"
         ;;
@@ -25,6 +28,11 @@ done
 if [[ -z ${BRANCH} ]] ; then
     echo "Branch must be specified!"
     exit 1
+fi
+
+if [[ -z ${TOKEN} ]]; then 
+    echo "You must privide a docker registry token!"
+    exit 1 
 fi
 
 if [ -z $PRODUCT ]; then
@@ -54,7 +62,7 @@ git clone --recurse-submodules  https://github.com/AnyVisionltd/compose-oneliner
 
 pushd /opt/compose-oneliner && chmod u+x /opt/compose-oneliner/compose-oneliner.sh
 
-exec ./compose-oneliner.sh ${BRANCH} ${PRODUCT} ${GIT}
+exec ./compose-oneliner.sh ${BRANCH} ${PRODUCT} ${GIT} ${TOKEN}
 if [ $? -ne 0 ] ; then 
 	echo "Something went wrong contact support"
 	exit 99
