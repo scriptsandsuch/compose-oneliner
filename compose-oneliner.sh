@@ -16,7 +16,7 @@ PRODUCT=$2
 COMPOSE_REPO_GIT="${3:-docker-compose}.git"
 COMPOSSE_REPO="${COMPOSE_BASH_URL}/${COMPOSE_REPO_GIT}"
 [ -d $DOCKER_COMPOSE_DIR ] || mkdir $DOCKER_COMPOSE_DIR
-[ -d ${DOCKER_COMPOSE_DIR}/${BRANCH} ] rm -rf ${DOCKER_COMPOSE_DIR}/${BRANCH}
+[ -d ${DOCKER_COMPOSE_DIR}/${BRANCH} ] && rm -rf ${DOCKER_COMPOSE_DIR}/${BRANCH}
 git clone ${COMPOSE_REPO} -b ${BRANCH} ${DOCKER_COMPOSE_DIR}/${BRANCH}
 if [ $? -ne 0 ]; then
     echo "No such branch branch try again"
