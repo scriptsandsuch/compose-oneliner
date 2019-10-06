@@ -12,6 +12,7 @@
       - iotop
       - openssh-server
       - ntp     
+      - systemd-coredump
      update_cache: yes
      install_recommends: no
      state: present
