@@ -20,6 +20,8 @@ do
         "-g"|"--git")
             GIT="${args[((i+1))]}"
         ;;
+        "-d"|"--debug")
+            EXEC='bash -x'
         ;;
 
     esac
@@ -62,7 +64,8 @@ fi
 git clone --recurse-submodules  https://github.com/AnyVisionltd/compose-oneliner.git /opt/compose-oneliner
 
 pushd /opt/compose-oneliner && chmod u+x /opt/compose-oneliner/compose-oneliner.sh
-exec ./compose-oneliner.sh ${BRANCH} ${TOKEN} ${PRODUCT} ${GIT}
+EXEC="${EXEC:-bash}"
+$EXEC ./compose-oneliner.sh ${BRANCH} ${TOKEN} ${PRODUCT} ${GIT}
 if [ $? -ne 0 ] ; then 
 	echo "Something went wrong contact support"
 	exit 99
