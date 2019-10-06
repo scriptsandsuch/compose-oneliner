@@ -15,6 +15,7 @@ BRANCH=$1
 TOKEN=$2
 PRODUCT=$3
 COMPOSE_REPO_GIT="${4:-docker-compose}.git"
+DASHBOARD=${5:-false}
 if [[ $TOKEN != "" ]] && [[ $TOKEN == *".json" ]] && [[ -f $TOKEN ]] ;then
     gcr_user="_json_key" 
     gcr_key="$(cat ${TOKEN} | tr '\n' ' ')"
@@ -57,8 +58,15 @@ update-grub
 
 echo 'xhost +SI:localuser:root' | tee /etc/profile.d/xhost.sh
 usermod -aG docker $(logname)
-chown -R $(logname):$(logname) ${DOCKER_COMPOSE_DIR}
+
 pushd ${DOCKER_COMPOSE_DIR}/${BRANCH}
+ver=`grep -F /api: ${DOCKER_COMPOSE_DIR}/${BRANCH}/docker-compose.yml | grep -Po 'api:\K[^"]+'`
+if [ "${DASHBOARD}" == "true" ]; then
+    curl -o ${HOME_DIR}/AnyVision-${ver}-linux-x86_64.AppImage https://s3.eu-central-1.amazonaws.com/anyvision-dashboard/${ver}AnyVision-${ver}-linux-x86_64.AppImage
+    chmod +x ${HOME_DIR}/AnyVision-${ver}-linux-x86_64.AppImage
+fi
+
+chown -R $(logname):$(logname) ${HOME_DIR}
 docker login -u "${gcr_user}" -p "${gcr_key}" "https://gcr.io"
 docker-compose up -d
 

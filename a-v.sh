@@ -23,6 +23,9 @@ do
         "-d"|"--debug")
             EXEC='bash -x'
         ;;
+        "--download-dashboard")
+            DASHBOARD="true"
+        ;;
 
     esac
     ((i++))
@@ -65,7 +68,7 @@ git clone --recurse-submodules  https://github.com/AnyVisionltd/compose-oneliner
 
 pushd /opt/compose-oneliner && chmod u+x /opt/compose-oneliner/compose-oneliner.sh
 EXEC="${EXEC:-bash}"
-$EXEC ./compose-oneliner.sh ${BRANCH} ${TOKEN} ${PRODUCT} ${GIT}
+$EXEC ./compose-oneliner.sh ${BRANCH} ${TOKEN} ${PRODUCT} ${GIT} ${DASHBOARD}
 if [ $? -ne 0 ] ; then 
 	echo "Something went wrong contact support"
 	exit 99
