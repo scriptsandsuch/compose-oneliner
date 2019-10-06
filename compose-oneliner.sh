@@ -70,4 +70,4 @@ chown -R $(logname):$(logname) ${HOME_DIR}
 docker login -u "${gcr_user}" -p "${gcr_key}" "https://gcr.io"
 docker-compose up -d
 
-echo "Done"
+echo "Done, Please reboot before continuing."
