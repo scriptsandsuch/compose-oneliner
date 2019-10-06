@@ -4,6 +4,20 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 ## Deploy
+function show_help(){
+    echo -e " \e[92m"
+    echo "Compose Oneliner Installer"
+    echo ""
+    echo "OPTIONS:"
+    echo "  [-b|--branch] git branch"
+    echo "  [-k|--token] GCR token"
+    echo "  [-p|--product] Product name to install"
+    echo "  [-g|--git] alterntive git repo (the default is docker-compose.git)"
+    echo "  [--download-dashboard] download dashboard"
+    echo "  [-d|--debug] enable debug mode"
+    echo "  [-h|--help|help] this help menu"
+    echo ""
+}
 args=("$@")
 for item in "${args[@]}"
 do
@@ -26,6 +40,11 @@ do
         "--download-dashboard")
             DASHBOARD="true"
         ;;
+        "-h"|"--help"|"help")
+            show_help
+            exit 0
+            ;;
+
 
     esac
     ((i++))
