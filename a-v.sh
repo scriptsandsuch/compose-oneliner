@@ -14,11 +14,12 @@ do
         "-k"|"--token")
             TOKEN="${args[((i+1))]}"
         ;;
+        "-p"|"--product")
+            PRODUCT="${args[((i+1))]}"
+        ;;
         "-g"|"--git")
             GIT="${args[((i+1))]}"
         ;;
-        "-p"|"--product")
-            PRODUCT="${args[((i+1))]}"
         ;;
 
     esac
@@ -61,8 +62,7 @@ fi
 git clone --recurse-submodules  https://github.com/AnyVisionltd/compose-oneliner.git /opt/compose-oneliner
 
 pushd /opt/compose-oneliner && chmod u+x /opt/compose-oneliner/compose-oneliner.sh
-
-exec ./compose-oneliner.sh ${BRANCH} ${PRODUCT} ${GIT} ${TOKEN}
+exec ./compose-oneliner.sh ${BRANCH} ${TOKEN} ${PRODUCT} ${GIT}
 if [ $? -ne 0 ] ; then 
 	echo "Something went wrong contact support"
 	exit 99
