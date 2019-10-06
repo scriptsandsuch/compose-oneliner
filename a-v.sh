@@ -5,7 +5,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 ## Deploy
 function show_help(){
-    echo -e " \e[92m"
+    echo ""
     echo "Compose Oneliner Installer"
     echo ""
     echo "OPTIONS:"
