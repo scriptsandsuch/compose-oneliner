@@ -12,9 +12,10 @@ HOME_DIR=`eval echo ~$(logname)`
 DOCKER_COMPOSE_DIR=${HOME_DIR}/docker-compose
 COMPOSE_BASH_URL="https://github.com/AnyVisionltd"
 BRANCH=$1
-PRODUCT=$2
-COMPOSE_REPO_GIT="${3:-docker-compose}.git"
-TOKEN=$4
+TOKEN=$2
+PRODUCT=$3
+COMPOSE_REPO_GIT="${4:-docker-compose}.git"
+DASHBOARD=${5:-false}
 if [[ $TOKEN != "" ]] && [[ $TOKEN == *".json" ]] && [[ -f $TOKEN ]] ;then
     gcr_user="_json_key" 
     gcr_key="$(cat ${TOKEN} | tr '\n' ' ')"
@@ -49,7 +50,7 @@ apt -qq update
 apt -qq install -y software-properties-common 
 apt-add-repository --yes --update ppa:ansible/ansible 
 apt -qq install -y ansible 
-ansible-playbook --become --become-user=root ansible/main.yml -vvv
+ansible-playbook --become --become-user=root ansible/main.yml -vv
 
 ## Fix nvidia-driver bug on Ubuntu 18.04 black screen on login: https://devtalk.nvidia.com/default/topic/1048019/linux/black-screen-after-install-cuda-10-1-on-ubuntu-18-04/post/5321320/#5321320
 sed -i -r -e 's/^GRUB_CMDLINE_LINUX_DEFAULT="(.*)?quiet ?(.*)?"/GRUB_CMDLINE_LINUX_DEFAULT="\1\2"/' -e 's/^GRUB_CMDLINE_LINUX_DEFAULT="(.*)?splash ?(.*)?"/GRUB_CMDLINE_LINUX_DEFAULT="\1\2"/' /etc/default/grub
@@ -57,9 +58,16 @@ update-grub
 
 echo 'xhost +SI:localuser:root' | tee /etc/profile.d/xhost.sh
 usermod -aG docker $(logname)
-chown -R $(logname):$(logname) ${DOCKER_COMPOSE_DIR}
+
 pushd ${DOCKER_COMPOSE_DIR}/${BRANCH}
+ver=`grep -F /api: ${DOCKER_COMPOSE_DIR}/${BRANCH}/docker-compose.yml | grep -Po 'api:\K[^"]+'`
+if [ "${DASHBOARD}" == "true" ]; then
+    curl -o ${HOME_DIR}/AnyVision-${ver}-linux-x86_64.AppImage https://s3.eu-central-1.amazonaws.com/anyvision-dashboard/${ver}AnyVision-${ver}-linux-x86_64.AppImage
+    chmod +x ${HOME_DIR}/AnyVision-${ver}-linux-x86_64.AppImage
+fi
+
+chown -R $(logname):$(logname) ${HOME_DIR}
 docker login -u "${gcr_user}" -p "${gcr_key}" "https://gcr.io"
 docker-compose up -d
 
-echo "Done"
+echo "Done, Please reboot before continuing."

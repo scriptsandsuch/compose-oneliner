@@ -4,6 +4,20 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 ## Deploy
+function show_help(){
+    echo ""
+    echo "Compose Oneliner Installer"
+    echo ""
+    echo "OPTIONS:"
+    echo "  [-b|--branch] git branch"
+    echo "  [-k|--token] GCR token"
+    echo "  [-p|--product] Product name to install"
+    echo "  [-g|--git] alterntive git repo (the default is docker-compose.git)"
+    echo "  [--download-dashboard] download dashboard"
+    echo "  [-d|--debug] enable debug mode"
+    echo "  [-h|--help|help] this help menu"
+    echo ""
+}
 args=("$@")
 for item in "${args[@]}"
 do
@@ -14,12 +28,23 @@ do
         "-k"|"--token")
             TOKEN="${args[((i+1))]}"
         ;;
-        "-g"|"--git")
-            GIT="${args[((i+1))]}"
-        ;;
         "-p"|"--product")
             PRODUCT="${args[((i+1))]}"
         ;;
+        "-g"|"--git")
+            GIT="${args[((i+1))]}"
+        ;;
+        "-d"|"--debug")
+            EXEC='bash -x'
+        ;;
+        "--download-dashboard")
+            DASHBOARD="true"
+        ;;
+        "-h"|"--help"|"help")
+            show_help
+            exit 0
+            ;;
+
 
     esac
     ((i++))
@@ -61,8 +86,8 @@ fi
 git clone --recurse-submodules  https://github.com/AnyVisionltd/compose-oneliner.git /opt/compose-oneliner
 
 pushd /opt/compose-oneliner && chmod u+x /opt/compose-oneliner/compose-oneliner.sh
-
-exec ./compose-oneliner.sh ${BRANCH} ${PRODUCT} ${GIT} ${TOKEN}
+EXEC="${EXEC:-bash}"
+$EXEC ./compose-oneliner.sh ${BRANCH} ${TOKEN} ${PRODUCT} ${GIT} ${DASHBOARD}
 if [ $? -ne 0 ] ; then 
 	echo "Something went wrong contact support"
 	exit 99
