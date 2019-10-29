@@ -172,7 +172,7 @@ fi
 
 COMPOSE_REPO="${COMPOSE_BASH_URL}/${GIT}.git"
 [ -d $DOCKER_COMPOSE_DIR ] || mkdir $DOCKER_COMPOSE_DIR
-[ -d ${DOCKER_COMPOSE_DIR}/${BRANCH} ] && rm -rf ${DOCKER_COMPOSE_DIR}/${BRANCH}
+[ -d ${DOCKER_COMPOSE_DIR}/${BRANCH} ] && rm -rf ${DOCKER_COMPOSE_DIR:?}/${BRANCH:?}
 
 if git clone ${COMPOSE_REPO} -b ${BRANCH} ${DOCKER_COMPOSE_DIR}/${BRANCH}; then
     echo "No such branch try again"
