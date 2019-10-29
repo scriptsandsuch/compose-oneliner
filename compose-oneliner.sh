@@ -182,7 +182,6 @@ fi
 
 pushd ${DOCKER_COMPOSE_DIR}/${BRANCH}
 DOCKER_COMPOSE_FILE=`find . -type f -regextype posix-extended -regex './docker\-compose\-(local\-)?gpu\.yml'`
-# ln -s `basename ${DOCKER_COMPOSE_FILE}` docker-compose.yml
 if [[ PRODUCT=="insights" ]]; then
     DOCKER_COMPOSE_PRODUCT_FILE=`find . -type f -regextype posix-extended -regex './docker\-compose\-insights\.yml'`
     if [ $? -ne 0 ]; then
@@ -227,11 +226,21 @@ usermod -aG docker $(logname)
 [[ "${DASHBOARD}" == "true" ]] && download-dashboard "${DOCKER_COMPOSE_DIR}/${BRANCH}/docker-compose.yml"
 chown -R $(logname):$(logname) ${HOME_DIR}
 docker login -u "${gcr_user}" -p "${gcr_key}" "https://gcr.io"
+
 pushd ${DOCKER_COMPOSE_DIR}/${BRANCH}
-# docker-compose up -d
-if [[ ${PRODUCT} == 'insights' ]]; then 
-    docker-compose -f ${DOCKER_COMPOSE_FILE} -f ${DOCKER_COMPOSE_PRODUCT_FILE} up -d
+case "${PRODUCT}" in 
+    "BT")
+        docker-compose -f ${DOCKER_COMPOSE_FILE} up -d
+        exit
+    ;;
+    "insights")
+        timedatectl set-timezone Etc/UTC && echo "changed the local machine time to UTC"
+        docker-compose -f ${DOCKER_COMPOSE_FILE} -f ${DOCKER_COMPOSE_PRODUCT_FILE} up -d
+        exit
+    ;;
+    esac
 else
-    docker-compose -f ${DOCKER_COMPOSE_FILE} up -d
+    echo "No product selected"
+    exit 99
 fi
 echo "Done, Please reboot before continuing."
