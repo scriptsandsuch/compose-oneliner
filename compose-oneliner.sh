@@ -164,7 +164,7 @@ fi
 
 if [[ $TOKEN != "" ]] && [[ $TOKEN == *".json" ]] && [[ -f $TOKEN ]] ;then
     gcr_user="_json_key" 
-    gcr_key="$(cat ${TOKEN} | tr '\n' ' ')"
+    gcr_key="$(< ${TOKEN} tr '\n' ' ')"
 elif  [[ $TOKEN != "" ]] && [[ ! -f $TOKEN ]] && [[ $TOKEN != *".json" ]]; then
     gcr_user="oauth2accesstoken"
     gcr_key=$TOKEN
