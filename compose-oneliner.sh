@@ -18,7 +18,6 @@ SCRIPT=$(readlink -f "$0")
 # Absolute path to the script directory
 BASEDIR=$(dirname "$SCRIPT")
 HOME_DIR=`eval echo ~$(logname)`
-DOCKER_COMPOSE_DIR=${HOME_DIR}/docker-compose
 COMPOSE_BASH_URL="https://github.com/AnyVisionltd"
 
 
@@ -145,6 +144,8 @@ if [[ "$DASHBOARD"=="false"  && ! -z $DASHBOARD_VERSION ]]; then
     echo "--download-dashboard was not spcify ignoring --dashboard-version"
     unset DASHBOARD_VERSION
 fi
+
+DOCKER_COMPOSE_DIR=${HOME_DIR}/${GIT}
 
 if [ -x "$(command -v apt-get)" ]; then
 
