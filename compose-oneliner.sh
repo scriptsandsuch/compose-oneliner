@@ -151,8 +151,7 @@ if [ -x "$(command -v apt-get)" ]; then
 
 	# install git
 	echo "Installing git"
-	git --version > /dev/null 2>&1
-	if [ $? != 0 ]; then
+	if git --version > /dev/null 2>&1; then
 	    set -e
 	    apt-get -qq update > /dev/null
 	    apt-get -qq install -y --no-install-recommends git curl > /dev/null
@@ -175,8 +174,7 @@ COMPOSE_REPO="${COMPOSE_BASH_URL}/${GIT}.git"
 [ -d $DOCKER_COMPOSE_DIR ] || mkdir $DOCKER_COMPOSE_DIR
 [ -d ${DOCKER_COMPOSE_DIR}/${BRANCH} ] && rm -rf ${DOCKER_COMPOSE_DIR}/${BRANCH}
 
-git clone ${COMPOSE_REPO} -b ${BRANCH} ${DOCKER_COMPOSE_DIR}/${BRANCH}
-if [ $? -ne 0 ]; then
+if git clone ${COMPOSE_REPO} -b ${BRANCH} ${DOCKER_COMPOSE_DIR}/${BRANCH}; then
     echo "No such branch try again"
     exit 1
 fi
@@ -204,10 +202,9 @@ set +e
 [ -d /opt/compose-oneliner ] && rm -rf /opt/compose-oneliner
 git clone --recurse-submodules  https://github.com/AnyVisionltd/compose-oneliner.git /opt/compose-oneliner
 pushd /opt/compose-oneliner
-ansible-playbook --become --become-user=root ansible/main.yml -vv
 
 
-if [ $? != 0 ]; then
+if ansible-playbook --become --become-user=root ansible/main.yml -vv; then
     echo "" 
     echo "Installation failed, please contact support." 
     exit 1
