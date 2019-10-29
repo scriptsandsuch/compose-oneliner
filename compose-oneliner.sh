@@ -29,7 +29,7 @@ function show_help(){
     echo "OPTIONS:"
     echo "  [-b|--branch] git branch"
     echo "  [-k|--token] GCR token"
-    echo "  [-p|--product] Product name to install"
+    echo "  [-p|--product] Product name to install, for example: insights"
     echo "  [-g|--git] alterntive git repo (the default is docker-compose.git)"
     echo "  [--download-dashboard] download dashboard"
     echo "  [--dashboard-version] download spcific dashboard version"
@@ -179,9 +179,16 @@ if [ $? -ne 0 ]; then
     echo "No such branch try again"
     exit 1
 fi
+
 pushd ${DOCKER_COMPOSE_DIR}/${BRANCH}
 DOCKER_COMPOSE_FILE=`find . -type f -regextype posix-extended -regex './docker\-compose\-(local\-)?gpu\.yml'`
-ln -s `basename ${DOCKER_COMPOSE_FILE}` docker-compose.yml
+if [[ PRODUCT=="insights" ]]; then
+    DOCKER_COMPOSE_PRODUCT_FILE=`find . -type f -regextype posix-extended -regex './docker\-compose\-insights\.yml'`
+    if [ $? -ne 0 ]; then
+        echo "No such product $PRODUCT try again"
+        exit 1
+    fi
+fi
 popd
 
 # Set Environment
@@ -219,7 +226,21 @@ usermod -aG docker $(logname)
 [[ "${DASHBOARD}" == "true" ]] && download-dashboard "${DOCKER_COMPOSE_DIR}/${BRANCH}/docker-compose.yml"
 chown -R $(logname):$(logname) ${HOME_DIR}
 docker login -u "${gcr_user}" -p "${gcr_key}" "https://gcr.io"
-pushd ${DOCKER_COMPOSE_DIR}/${BRANCH}
-docker-compose up -d
 
+pushd ${DOCKER_COMPOSE_DIR}/${BRANCH}
+case "${PRODUCT}" in 
+    "BT")
+        docker-compose -f ${DOCKER_COMPOSE_FILE} up -d
+        exit
+    ;;
+    "insights")
+        timedatectl set-timezone Etc/UTC && echo "changed the local machine time to UTC"
+        docker-compose -f ${DOCKER_COMPOSE_FILE} -f ${DOCKER_COMPOSE_PRODUCT_FILE} up -d
+        exit
+    ;;
+    esac
+else
+    echo "No product selected"
+    exit 99
+fi
 echo "Done, Please reboot before continuing."
