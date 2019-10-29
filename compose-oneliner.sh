@@ -140,7 +140,7 @@ if [[ -z ${DASHBOARD} ]]; then
     DASHBOARD="false"
 fi
 
-if [[ "$DASHBOARD"=="false"  && ! -z $DASHBOARD_VERSION ]]; then
+if [[ "$DASHBOARD" == "false"  && -n $DASHBOARD_VERSION ]]; then
     echo "--download-dashboard was not spcify ignoring --dashboard-version"
     unset DASHBOARD_VERSION
 fi
