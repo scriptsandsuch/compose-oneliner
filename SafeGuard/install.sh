@@ -59,17 +59,11 @@ echo "2" > /opt/sg.f ##flag if the script has been run
 echo "DONE!"
 echo "Please reboot your machine"
 }
-mount_storage(){
-	##TODO
-}
 SuccesfulPrint(){
 	echo "=================================================================="
 	echo "                    $1 ....{green}success{reset}                  "
 	echo "=================================================================="
 }
-
-
-
 
 
 
