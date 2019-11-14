@@ -233,7 +233,6 @@ case "${PRODUCT}" in
     ;;
     "insights")
         timedatectl set-timezone Etc/UTC && echo "changed the local machine time to UTC"
-        docker-compose -f ${DOCKER_COMPOSE_FILE} -f ${DOCKER_COMPOSE_PRODUCT_FILE} up -d
         exit
     ;;
     esac
