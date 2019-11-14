@@ -1,0 +1,16 @@
+{
+  "entrance": {
+    "title": "entrance",
+    "ip": "192.168.20.68",
+    "channel": "1",
+    "skipSeconds": 20,
+    "autoCloseSeconds": 10
+  },
+  "exit": {
+    "title": "exit",
+    "ip": "192.168.20.68",
+    "channel": "2",
+    "skipSeconds": 20,
+    "autoCloseSeconds": 10
+   }
+}
