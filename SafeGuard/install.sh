@@ -6,16 +6,7 @@ else
 	echo "You have set the wrong username for the ubuntu installation, please reinstall with a user named user"
 	exit 1
 fi
-for item in "${args[@]}"
-do
-    case $item in
-        "-k"|"--token")
-            token="${args[((i+1))]}"
-        ;;
-        *) echo "Invalid Argument, Please Enter a Valid argument"; echo "Exiting...";exit 1;;
-    esac
-    ((i++))
-done
+token=$1
 if [[ -z ${token} ]]; then 
     echo
     echo "You must privide a docker registry token!"
@@ -83,7 +74,8 @@ if [[ -f "/opt/sg.f" ]]; then
 	else
 		echo "App not installed, please Install it and try again"
 		echo "Exiting..."
-		exit
+		exit 1
+	fi
 else
 	before_reboot
 fi
