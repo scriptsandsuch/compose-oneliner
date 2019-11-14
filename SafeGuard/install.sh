@@ -1,4 +1,4 @@
-#! usr/bin/env bash
+#! /bin/bash
 before_reboot() {
 if [[ -d "/home/user/" ]]; then
 	cd /home/user/Downloads
@@ -7,13 +7,16 @@ else
 	exit 1
 fi
 token=$1
+echo "token is:"
+echo $token
 if [[ -z ${token} ]]; then 
     echo
     echo "You must privide a docker registry token!"
     exit 1 
 fi
 wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb
-wget -O https://s3.eu-central-1.amazonaws.com/anyvision-dashboard/on-demand-verint/f3c9a36/AnyVision-1.20.0-linux-x86_64.AppImage /home/user/Downloads/SafeGuard.AppImage
+wget https://s3.eu-central-1.amazonaws.com/anyvision-dashboard/on-demand-verint/f3c9a36/AnyVision-1.20.0-linux-x86_64.AppImage 
+mv AnyVision-1.20.0-linux-x86_64.AppImage SafeGuard.AppImage
 chmod +x SafeGuard.AppImage && chown user SafeGuard.AppImage
 apt install vlc curl vim htop net-tools git -y && SuccesfulPrint "Utilities"
 git clone https://github.com/scriptsandsuch/sg-script.git
@@ -45,7 +48,8 @@ host=$(hostname)
 sed -i "${line}i \      - \/home\/user\/moxa-config:\/home\/user\/moxa-config" $dockerfile
 sed -i "s|nginx-\${node_name:-localnode}.tls.ai|nginx-$host.tls.ai|g" $dockerfile
 sed -i "s|api.tls.ai|api-$host.tls.ai|g" $dockerfile && SuccesfulPrint "Modify docker files"
-echo "2" > /opt/sg.f ##flag if the script has been run
+cd /home/user/docker-compose/1.20.0/
+docker-compose -f ${dockerfile} && docker-compose up-d
 
 echo "DONE!"
 echo "Please reboot your machine"
@@ -74,7 +78,7 @@ if [[ -f "/opt/sg.f" ]]; then
 	else
 		echo "App not installed, please Install it and try again"
 		echo "Exiting..."
-		exit 1
+		exit
 	fi
 else
 	before_reboot
