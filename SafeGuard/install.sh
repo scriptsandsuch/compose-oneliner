@@ -15,11 +15,10 @@ if [[ -z ${token} ]]; then
     exit 1 
 fi
 wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb
-wget https://s3.eu-central-1.amazonaws.com/anyvision-dashboard/on-demand-verint/f3c9a36/AnyVision-1.20.0-linux-x86_64.AppImage 
-mv AnyVision-1.20.0-linux-x86_64.AppImage SafeGuard.AppImage
-chmod +x SafeGuard.AppImage && chown user SafeGuard.AppImage
+wget https://github.com/scriptsandsuch/compose-oneliner/releases/download/SG/FaceSearch-1.20.0-linux-x86_64.AppImage
+chmod +x FaceSearch-1.20.0-linux-x86_64.AppImage && chown user FaceSearch-1.20.0-linux-x86_64.AppImage
 apt install vlc curl vim htop net-tools git -y && SuccesfulPrint "Utilities"
-git clone https://github.com/scriptsandsuch/sg-script.git
+git clone https://github.com/scriptsandsuch/compose-oneliner
 apt install ./team* -y && SuccesfulPrint "TeamViewer"
 
 ##moxa set up
