@@ -6,12 +6,12 @@ else
 	echo "You have set the wrong username for the ubuntu installation, please reinstall with a user named user"
 	exit 1
 fi
-token="$1"
+local token="$1"
 echo "token is:"
 echo ${token}
 if [[ -z ${token} ]]; then 
     echo
-    echo "You must privide a docker registry token!"
+    echo "You must provide a docker registry token!"
     exit 1 
 fi
 wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb
@@ -73,7 +73,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 if [[ -f "/opt/sg.f" ]]; then
 	if [[-f "/home/user/docker-compose/1.20.0/docker-compose.yml"]]; then
-		before_reboot
+		before_reboot "$1"
 	else
 		echo "App not installed, please Install it and try again"
 		echo "Exiting..."
