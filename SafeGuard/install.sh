@@ -51,7 +51,7 @@ sed -i "${line}i \      - \/home\/user\/moxa-config:\/home\/user\/moxa-config" $
 sed -i "s|nginx-\${node_name:-localnode}.tls.ai|nginx-$host.tls.ai|g" ${dockerfile}
 sed -i "s|api.tls.ai|api-$host.tls.ai|g" ${dockerfile} && SuccesfulPrint "Modify docker files"
 cd /home/user/docker-compose/1.20.0/
-docker-compose -f ${dockerfile} && docker-compose up-d
+docker-compose up-d
 
 echo "DONE!"
 echo "Please reboot your machine"
