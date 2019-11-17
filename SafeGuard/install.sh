@@ -6,9 +6,9 @@ else
 	echo "You have set the wrong username for the ubuntu installation, please reinstall with a user named user"
 	exit 1
 fi
-token=$1
+token="$1"
 echo "token is:"
-echo $token
+echo ${token}
 if [[ -z ${token} ]]; then 
     echo
     echo "You must privide a docker registry token!"
