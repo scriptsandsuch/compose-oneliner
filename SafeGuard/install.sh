@@ -24,8 +24,8 @@ apt install ./team* -y && SuccesfulPrint "TeamViewer"
 ##moxa set up
 moxadir=/home/user/moxa-config/
 mkdir $moxadir
-mv /home/user/Downloads/sg-script/moxa_e1214.sh $moxadir
-mv /home/user/Downloads/sg-script/cameraList.json $moxadir
+mv /home/user/Downloads/compose-oneliner/SafeGuard/moxa_e1214.sh $moxadir
+mv /home/user/Downloads/compose-oneliner/SafeGuard/cameraList.json $moxadir
 chmod +x /home/user/moxa-config/*
 
 wget -qO- https://raw.githubusercontent.com/scriptsandsuch/compose-oneliner/development/compose-oneliner.sh | bash -s -- -b 1.20.0 -k ${token}
