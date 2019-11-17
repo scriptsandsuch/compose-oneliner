@@ -73,12 +73,12 @@ if [ "$EUID" -ne 0 ]; then
 fi
 if [[ -f "/opt/sg.f" ]]; then
 	if [[-f "/home/user/docker-compose/1.20.0/docker-compose.yml"]]; then
-		before_reboot "$1"
+		after_reboot
 	else
 		echo "App not installed, please Install it and try again"
 		echo "Exiting..."
 		exit
 	fi
 else
-	before_reboot
+	before_reboot "$1"
 fi
