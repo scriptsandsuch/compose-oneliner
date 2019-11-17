@@ -29,6 +29,7 @@ mv /home/user/Downloads/sg-script/cameraList.json $moxadir
 chmod +x /home/user/moxa-config/*
 
 wget -qO- https://raw.githubusercontent.com/scriptsandsuch/compose-oneliner/development/compose-oneliner.sh | bash -s -- -b 1.20.0 -k ${token}
+ln -s /home/user/docker-compose/1.20.0/docker-compose-local-gpu.yml /home/user/docker-compose/1.20.0/docker-compose.yml && SuccesfulPrint "Create Symbolic Link"
 echo "1" > /opt/sg.f ##flag if the script has been run 
 }
 
@@ -54,6 +55,9 @@ echo "DONE!"
 echo "Please reboot your machine"
 }
 SuccesfulPrint(){
+local red=`tput setaf 1`
+local green=`tput setaf 2`
+local reset=`tput sgr0`
 	echo "=================================================================="
 	echo "                    $1 ....{green}success{reset}                  "
 	echo "=================================================================="
@@ -72,7 +76,7 @@ if [ "$EUID" -ne 0 ]; then
 	exit
 fi
 if [[ -f "/opt/sg.f" ]]; then
-	if [[-f "/home/user/docker-compose/1.20.0/docker-compose.yml"]]; then
+	if [[ -f "/home/user/docker-compose/1.20.0/docker-compose.yml"]]; then
 		after_reboot
 	else
 		echo "App not installed, please Install it and try again"
