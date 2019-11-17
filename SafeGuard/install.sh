@@ -36,7 +36,9 @@ echo "1" > /opt/sg.f ##flag if the script has been run
 
 after_reboot(){
 ##edit env and yml
-dockerfile = "/home/user/docker-compose/1.20.0/docker-compose.yml"
+local dockerfile="/home/user/docker-compose/1.20.0/docker-compose.yml"
+echo "Dockerfile set as:"
+echo ${dockerfile}
 tee -a /home/user/docker-compose/1.20.0/env/broadcaster.env <<'EOF'
 ## Modbus plugin integration
 BCAST_MODBUS_IS_ENABLED=true
@@ -45,9 +47,9 @@ BCAST_MODBUS_CAMERA_LIST_PATH=/home/user/moxa-config/cameraList.json
 EOF
 line=$(grep -nF broadcaster.tls.ai /home/user/docker-compose/1.20.0/docker-compose.yml  | awk -F: '{print $1}') ; line=$((line+2))
 host=$(hostname)
-sed -i "${line}i \      - \/home\/user\/moxa-config:\/home\/user\/moxa-config" $dockerfile
-sed -i "s|nginx-\${node_name:-localnode}.tls.ai|nginx-$host.tls.ai|g" $dockerfile
-sed -i "s|api.tls.ai|api-$host.tls.ai|g" $dockerfile && SuccesfulPrint "Modify docker files"
+sed -i "${line}i \      - \/home\/user\/moxa-config:\/home\/user\/moxa-config" ${dockerfile}
+sed -i "s|nginx-\${node_name:-localnode}.tls.ai|nginx-$host.tls.ai|g" ${dockerfile}
+sed -i "s|api.tls.ai|api-$host.tls.ai|g" ${dockerfile} && SuccesfulPrint "Modify docker files"
 cd /home/user/docker-compose/1.20.0/
 docker-compose -f ${dockerfile} && docker-compose up-d
 
