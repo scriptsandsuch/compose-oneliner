@@ -228,7 +228,7 @@ docker login -u "${gcr_user}" -p "${gcr_key}" "https://gcr.io"
 pushd ${DOCKER_COMPOSE_DIR}/${BRANCH}
 case "${PRODUCT}" in 
     "BT")
-        docker-compose -f ${DOCKER_COMPOSE_FILE} up -d
+        ##docker-compose -f ${DOCKER_COMPOSE_FILE} up -d
         exit
     ;;
     "insights")
