@@ -1,3 +1,4 @@
+
 #! /bin/bash
 before_reboot() {
 if [[ -d "/home/user/" ]]; then
@@ -47,13 +48,14 @@ echo "1" > /opt/sg.f ##flag if the script has been run
 
 ##make script auto run after login
 tee -a /home/user/.profile <<'EOF' && SuccesfulPrint "Startup added"
-gnome-terminal -e 'bash -c "/home/user/Downloads/compose-oneliner/SafeGuard/install.sh; exec bash"'
+gnome-terminal -e 'echo "user1!" | sudo su -; bash -c "/home/user/Downloads/compose-oneliner/SafeGuard/install.sh; exec bash"'
 EOF
 }
 
 
 after_reboot(){
 ##edit env and ymld
+dockerfile=/home/user/docker-compose/1.20.0/docker-compose.yml
 echo "Dockerfile set as:"
 echo ${dockerfile}
 local isInFile=$(cat /home/user/docker-compose/1.20.0/env/broadcaster.env | grep -c "/moxa_e1214.sh")
@@ -68,7 +70,7 @@ EOF
 else
 	echo "It seems the script has been run already, skipping broadcaster edits..."
 fi
-##doesn't hurt to run again since it's replacing not appending.
+##doesnt hurt to run again since it's replacing not appending.
 line=$(grep -nF broadcaster.tls.ai /home/user/docker-compose/1.20.0/docker-compose.yml  | awk -F: '{print $1}') ; line=$((line+2))
 host=$(hostname)
 sed -i "${line}i \      - \/home\/user\/moxa-config:\/home\/user\/moxa-config" ${dockerfile}
