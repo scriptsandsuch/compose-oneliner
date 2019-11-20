@@ -13,7 +13,7 @@ if [[ -z ${token} ]]; then
     echo
     echo "You must provide a docker registry token!"
     echo "Exiting..."
-    exit 1 
+    exit 1; 
 fi
 dpkg -a --configure
 wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb
@@ -114,45 +114,29 @@ local white=$'\e[0m'
 	echo -e "=================================================================="
 }
 ##main
-local red=$'\e[1;31m'
-local white=$'\e[0m'
-if [ "$EUID" -ne 0 ]; then	
+red=$'\e[1;31m'
+white=$'\e[0m'
+if [ "$EUID" -ne 0 ]; then
 	echo "Please run this script as root"
 	echo "Exiting..."
 	exit 1
+fi
 if grep -q "1" /opt/sg.f; then
 	if [[ -f "/home/user/docker-compose/1.20.0/docker-compose.yml" ]]; then
 		after_reboot
 	else
 		echo "App not installed, please Install it and try again"
 		echo "Exiting..."
-		exit
+		exit 1;
 	fi
-elif [[ ! -f "/opt/sg.f" ]];then
+elif [[ ! -f "/opt/sg.f" ]]; then
 	before_reboot "$1"
-elif grep -q "2" /opt/sg.f;then
+elif $(grep -q "2" /opt/sg.f) ; then
 	echo "Script has been run fully already"
 	read -p "Do you wish to clean this pc? [Y/N] ${red}(Warning! this will delete EVERYTHING)${white}" -n 1 -r $yn
 	case "$yn" in
 		y|Y) Clean && exit 0;;
-		n|N) 
-			echo "Not Cleaning..."
-			echo "Exiting..."
-			exit 1;;
+		n|N) echo "Not Cleaning..." ; echo "Exiting..."; exit 1;;
 		*) echo "Invalid choice, Exiting.."; exit 1;;
 	esac
 fi
-
-
-
-# if [[ -f "/opt/sg.f" ]]; then
-# 	if [[ -f "/home/user/docker-compose/1.20.0/docker-compose.yml" ]]; then
-# 		after_reboot
-# 	else
-# 		echo "App not installed, please Install it and try again"
-# 		echo "Exiting..."
-# 		exit
-# 	fi
-# else
-# 	before_reboot "$1"
-# fi
